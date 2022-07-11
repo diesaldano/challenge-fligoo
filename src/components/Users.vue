@@ -35,27 +35,13 @@
 <script>
   export default {
     name: 'Users',
-    async created() {
-      try {
-          const localStorageUsers = localStorage.getItem('users')
-          // let initialValue;
-          if (!localStorageUsers) {
-            let res = await fetch('https://reqres.in/api/users')
-            let data = await res.json()
-            this.data = data.data
-            localStorage.setItem('users', JSON.stringify(this.data))
-            } else {
-            this.data = JSON.parse(localStorageUsers)
-          }
-        } catch (error) {
-          console.log(error)
-        }
-
+    props: {
+      users: {
+        type: Array,
+        required: true,
+      },
     },
     computed: {
-      users() {
-        return this.data || [];
-      }
     },
     methods: {
       editUser(user){
@@ -75,15 +61,14 @@
         })
       },
       deleteUser(user){
-        let index = this.data.findIndex(item => item.id == user.id)
-        this.data.splice(index, 1)
-        localStorage.setItem('users', JSON.stringify(this.data))
+        let index = this.users.findIndex(item => item.id == user.id)
+        this.users.splice(index, 1)
+        localStorage.setItem('users', JSON.stringify(this.users))
       }
     },
     watch: {
     },
     data: () => ({
-      data: []
     }),
   }
 </script>
